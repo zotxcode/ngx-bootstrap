@@ -328,6 +328,10 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
     this.refreshView();
   }
 
+  getUniqueId(): string {
+    return this.uniqueId;
+  }
+
   protected getCustomClassForDate(date: Date): string {
     if (!this.customClass) {
       return '';

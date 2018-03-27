@@ -15,9 +15,9 @@ import { DatePickerInnerComponent } from './datepicker-inner.component';
         <button type="button" class="btn btn-default btn-sm pull-left float-left"
                 (click)="datePicker.move(-1)" tabindex="-1">‹</button></th>
       <th [attr.colspan]="((datePicker.monthColLimit - 2) <= 0) ? 1 : datePicker.monthColLimit - 2">
-        <button [id]="datePicker.uniqueId + '-title'"
+        <button [id]="datePicker.getUniqueId() + '-title'"
                 type="button" class="btn btn-default btn-sm"
-                (click)="datePicker.toggleMode()"
+                (click)="datePicker.toggleMode(1)"
                 [disabled]="datePicker.datepickerMode === maxMode"
                 [ngClass]="{disabled: datePicker.datepickerMode === maxMode}" tabindex="-1" style="width:100%;">
           <strong>{{ title }}</strong> 
