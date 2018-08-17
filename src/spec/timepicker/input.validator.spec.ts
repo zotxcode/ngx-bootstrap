@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  FormControl,
-  FormsModule, NgForm, NgModel,
-  ReactiveFormsModule
+  FormsModule,
+  ReactiveFormsModule, ValidationErrors
 } from '@angular/forms';
 
 import {
@@ -11,7 +10,12 @@ import {
   TimepickerConfig,
   TimepickerModule
 } from '../../timepicker';
-import { hoursValidator, limitsValidator, minutesValidator, secondsValidator } from '../../timepicker/input.validator';
+import {
+  hoursValidator,
+  getlimitsValidator,
+  minutesValidator,
+  secondsValidator
+} from '../../timepicker/input.validator';
 
 function testTime(hours?: number, minutes?: number, seconds?: number) {
   const time = new Date();
@@ -39,37 +43,37 @@ describe('Component: TimepickerComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(TimepickerComponent);
       component = fixture.componentInstance;
-      component.ngControl = new NgModel(new NgForm([], []), [], [], [component]);
 
       fixture.detectChanges();
     });
 
     it('should return error if hour are invalid', () => {
-      expect(hoursValidator(new FormControl({ hours: 99 })))
+      expect(hoursValidator({ hours: '99' }))
         .toEqual({ hours: true });
     });
 
     it('should return error if minute are invalid', () => {
-      expect(minutesValidator(new FormControl({ minutes: 99 })))
+      expect(minutesValidator({ minutes: '99' }))
         .toEqual({ minutes: true });
     });
 
     it('should return error if second are invalid', () => {
-      expect(secondsValidator(new FormControl({ seconds: 99 })))
+      expect(secondsValidator({ seconds: '99' }))
         .toEqual({ seconds: true });
     });
 
-    it('should return error if hours limits are invalid', () => {
-      expect(limitsValidator(new FormControl({
-        hours: 18,
+    it('should return error if hours out of range', () => {
+      const errors: ValidationErrors = getlimitsValidator(testTime(16), testTime(18), true)({
+        hours: 20,
         minutes: 44,
-        seconds: 0,
-        range: { max: testTime(18), min: testTime(17)}
-      })))
+        seconds: 0
+      });
+
+      expect(errors)
         .toEqual({
-          hours: { inputLimit: true },
-          minutes: { inputLimit: true },
-          seconds: { inputLimit: true }
+          hours: { outOfRange: true },
+          minutes: { outOfRange: true },
+          seconds: { outOfRange: true }
         });
     });
   });

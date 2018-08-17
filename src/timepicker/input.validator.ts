@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { ValidationErrors } from '@angular/forms';
 import {
   isHourInputValid,
   isInRange,
@@ -7,7 +7,7 @@ import {
 } from './timepicker.utils';
 
 
-export function hoursValidator({ value }: AbstractControl): ValidationErrors | null {
+export function hoursValidator(value: {[key: string]: string}): ValidationErrors | null {
   if (value.hours && !isHourInputValid(value.hours)) {
     return { hours : true };
   }
@@ -15,7 +15,7 @@ export function hoursValidator({ value }: AbstractControl): ValidationErrors | n
   return null;
 }
 
-export function minutesValidator({ value }: AbstractControl): ValidationErrors | null {
+export function minutesValidator(value: {[key: string]: string}): ValidationErrors | null {
   if (value.minutes && !isMinuteInputValid(value.minutes)) {
     return { minutes : true };
   }
@@ -23,7 +23,7 @@ export function minutesValidator({ value }: AbstractControl): ValidationErrors |
   return null;
 }
 
-export function secondsValidator({ value }: AbstractControl): ValidationErrors | null {
+export function secondsValidator(value: {[key: string]: string}): ValidationErrors | null {
   if (value.seconds && !isSecondInputValid(value.seconds)) {
     return { seconds : true };
   }
@@ -31,27 +31,42 @@ export function secondsValidator({ value }: AbstractControl): ValidationErrors |
   return null;
 }
 
-export function limitsValidator({ value }: AbstractControl): ValidationErrors | null {
-  if (!value.range) {
+export function getlimitsValidator(min: Date, max: Date, isPM: boolean): Function {
+  return (value: {[key: string]: number}): ValidationErrors | null  => {
 
-    return null;
-  }
+    const time: Date = new Date();
+    const hours = isPM ? (Number(value.hours) + 12) : value.hours;
 
-  const time: Date = new Date();
-  const hours = value.isPM ? (Number(value.hours) + 12) : value.hours;
+    time.setHours(hours);
+    time.setMinutes(value.minutes);
+    time.setSeconds(value.seconds);
 
-  time.setHours(hours);
-  time.setMinutes(value.minutes);
-  time.setSeconds(value.seconds);
+    if (isInRange(time, max, min)) {
 
-  if (isInRange(time, value.range.max, value.range.min)) {
+      return null;
+    }
 
-    return null;
-  }
+    return {
+      hours: { outOfRange: true },
+      minutes: { outOfRange: true },
+      seconds: { outOfRange: true }
+    };
+  };
+}
 
-  return {
-    hours: { inputLimit: true },
-    minutes: { inputLimit: true },
-    seconds: { inputLimit: true }
+export function compose(validators: Function[]): Function {
+  return (timeValue: any): ValidationErrors | null => {
+
+    const newErrors: ValidationErrors[] = validators.map(
+      (validator: Function) => validator(timeValue)
+    );
+    const errors: ValidationErrors = Object.assign({}, ...newErrors);
+
+    if (!Object.keys(errors).length) {
+
+      return null;
+    }
+
+    return errors;
   };
 }

@@ -1,11 +1,6 @@
 // tslint:disable:no-floating-promises max-file-line-count
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import {
-  FormsModule,
-  NgForm,
-  NgModel,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { fireEvent } from '../../../scripts/helpers';
@@ -51,22 +46,18 @@ describe('Component: TimepickerComponent', () => {
   let buttonChanges: HTMLElement;
 
   beforeEach(() => {
-    return TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [TimepickerModule.forRoot(), FormsModule, ReactiveFormsModule],
       providers: [TimepickerConfig, TimepickerActions]
-    })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(TimepickerComponent);
-        component = fixture.componentInstance;
-        component.ngControl = new NgModel(new NgForm([], []), [], [], [component]);
-
-        fixture.detectChanges();
-      });
+    });
   });
 
   describe('by default', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
       inputHours = getInputElements(fixture)[0];
       inputMinutes = getInputElements(fixture)[1];
       inputSeconds = getInputElements(fixture)[2];
@@ -99,6 +90,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('validate input fields with default state', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       inputHours = getInputElements(fixture)[0];
       inputMinutes = getInputElements(fixture)[1];
       buttonChanges = getElements(fixture, 'a.btn');
@@ -136,6 +131,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('validate input fields with property of showMeridian switch on', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       inputHours = getInputElements(fixture)[0];
       buttonMeridian = getElements(fixture, 'button')[0];
       buttonDebugMeridian = getDebugElements(fixture, 'button')[0];
@@ -197,6 +196,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('validate input fields with property of showMeridian switch off', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       buttonMeridian = getElements(fixture, 'button')[0];
       inputHours = getInputElements(fixture)[0];
     });
@@ -228,6 +231,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('validate input fields with property of max', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       inputHours = getInputElements(fixture)[0];
       inputMinutes = getInputElements(fixture)[1];
       buttonChanges = getElements(fixture, 'a.btn');
@@ -251,6 +258,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('validate input fields with property of min', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       inputHours = getInputElements(fixture)[0];
       inputMinutes = getInputElements(fixture)[1];
       buttonChanges = getElements(fixture, 'a.btn');
@@ -276,8 +287,6 @@ describe('Component: TimepickerComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(TimepickerComponent);
       component = fixture.componentInstance;
-      component.ngControl = new NgModel(new NgForm([], []), [], [], [component]);
-
       component.showMinutes = false;
 
       fixture.detectChanges();
@@ -290,6 +299,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('display seconds fields with property of showSeconds', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       inputSeconds = getInputElements(fixture)[2];
     });
 
@@ -326,6 +339,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('input fields with property of readonlyInput', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       inputHours = getInputElements(fixture)[0];
       inputMinutes = getInputElements(fixture)[1];
       inputSeconds = getInputElements(fixture)[2];
@@ -402,6 +419,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('input fields hour with property of hourStep', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       inputHours = getInputElements(fixture)[0];
       inputMinutes = getInputElements(fixture)[1];
       inputSeconds = getInputElements(fixture)[2];
@@ -498,6 +519,10 @@ describe('Component: TimepickerComponent', () => {
 
   describe('hide change button', () => {
     beforeEach(() => {
+      fixture = TestBed.createComponent(TimepickerComponent);
+      fixture.detectChanges();
+
+      component = fixture.componentInstance;
       buttonChanges = getElements(fixture, 'a.btn');
     });
 
@@ -518,9 +543,7 @@ describe('Component: TimepickerComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(TimepickerComponent);
       component = fixture.componentInstance;
-      component.ngControl = new NgModel(new NgForm([], []), [], [], [component]);
       component.showSeconds = true;
-
       fixture.detectChanges();
 
       inputHours = getInputElements(fixture)[0];
@@ -738,9 +761,7 @@ describe('Component: TimepickerComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(TimepickerComponent);
       component = fixture.componentInstance;
-      component.ngControl = new NgModel(new NgForm([], []), [], [], [component]);
       component.showSeconds = true;
-
       fixture.detectChanges();
 
       inputHours = getInputElements(fixture)[0];
@@ -800,7 +821,7 @@ describe('Component: TimepickerComponent', () => {
       });
     }));
 
-    it('should can change hours value with the arrow keys down', fakeAsync(() => {
+    it('should can not change hours value with the arrow keys down', fakeAsync(() => {
       const methodSpy = spyOn(component, 'changeTimeOption').and.callThrough();
       component.hourStep = 3;
 
@@ -816,7 +837,7 @@ describe('Component: TimepickerComponent', () => {
       });
     }));
 
-    it('should can change minutes value with the arrow keys down', fakeAsync(() => {
+    it('should can not change minutes value with the arrow keys down', fakeAsync(() => {
       const methodSpy = spyOn(component, 'changeTimeOption').and.callThrough();
       component.minuteStep = 3;
 
@@ -832,7 +853,7 @@ describe('Component: TimepickerComponent', () => {
       });
     }));
 
-    it('should can change seconds value with the arrow keys down', fakeAsync(() => {
+    it('should can not change seconds value with the arrow keys down', fakeAsync(() => {
       const methodSpy = spyOn(component, 'changeTimeOption').and.callThrough();
       component.showSeconds = true;
       component.secondsStep = 3;
@@ -907,10 +928,7 @@ describe('Component: TimepickerComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(TimepickerComponent);
       component = fixture.componentInstance;
-      component.ngControl = new NgModel(new NgForm([], []), [], [], [component]);
-
       component.showSeconds = true;
-
       fixture.detectChanges();
 
       inputHours = getInputElements(fixture)[0];
@@ -948,44 +966,37 @@ describe('Component: TimepickerComponent', () => {
 
       const methodSpy = spyOn(component, 'onChange').and.callThrough();
 
-      component.hours = '99';
-      component.minutes = '99';
-      component.seconds = '99';
-
-      component.ngControl.control.setErrors({ hours: true, minutes: true, seconds: true });
-
+      component.onTimeChanged('99', '99', '99');
       component._updateTime();
       fixture.detectChanges();
 
       expect(methodSpy).toHaveBeenCalledWith(null);
     });
 
-    it('should clear model if setted hours as invalid', () => {
-      component.showSeconds = true;
-
+    it('should clear model if hour input is invalid', () => {
       const methodSpy = spyOn(component, 'onChange').and.callThrough();
       spyOn(component.isValid, 'emit').and.stub();
+      component.hours = '10';
+      component.showMeridian = false;
 
-      component.ngControl.control.setErrors({ hours: true });
-
-      fixture.detectChanges();
+      component.onTimeChanged('99', '0', '0');
 
       expect(methodSpy).toHaveBeenCalledWith(null);
       expect(component.isValid.emit).toHaveBeenCalledWith(false);
+      expect(Boolean(component.errors.hours)).toEqual(true);
     });
 
-    it('should clear model if hour limits are invalid', () => {
-      component.showSeconds = true;
+    it('should clear model if hours out of range', () => {
+      component.max = testTime(18, 22);
 
       const methodSpy = spyOn(component, 'onChange').and.callThrough();
       spyOn(component.isValid, 'emit').and.stub();
 
-      component.ngControl.control.setErrors({ hours: { inputLimit: true } });
-
-      fixture.detectChanges();
+      component.onTimeChanged('22', '0', '0');
 
       expect(methodSpy).toHaveBeenCalledWith(null);
       expect(component.isValid.emit).toHaveBeenCalledWith(false);
+      expect(Boolean(component.errors.hours)).toEqual(true);
     });
 
     it('should update time if hour is valid', () => {
@@ -993,35 +1004,29 @@ describe('Component: TimepickerComponent', () => {
       component.hours = '10';
       component.showMeridian = false;
 
-      component.updateHours('17');
+      component.onTimeChanged('17', '0', '0');
 
-      expect(Boolean(component.ngControl.hasError('hours'))).toEqual(false);
+      expect(Boolean(component.errors)).toEqual(false);
       expect(component._updateTime).toHaveBeenCalled();
     });
 
-    it('should clear model if setted minutes as invalid', () => {
-      component.showSeconds = true;
-
+    it('should clear model if minute input is invalid', () => {
       const methodSpy = spyOn(component, 'onChange').and.callThrough();
       spyOn(component.isValid, 'emit').and.stub();
+      component.minutes = '10';
 
-      component.ngControl.control.setErrors({ minutes: true });
-
-      fixture.detectChanges();
+      component.onTimeChanged('0', '99', '0');
 
       expect(methodSpy).toHaveBeenCalledWith(null);
       expect(component.isValid.emit).toHaveBeenCalledWith(false);
     });
 
-    it('should clear model if minute limits are invalid', () => {
-      component.showSeconds = true;
-
+    it('should clear model if minute out of range', () => {
       const methodSpy = spyOn(component, 'onChange').and.callThrough();
       spyOn(component.isValid, 'emit').and.stub();
+      component.max = testTime(12, 30);
 
-      component.ngControl.control.setErrors({ minutes: { inputLimit: true } });
-
-      fixture.detectChanges();
+      component.onTimeChanged('12', '40', '0');
 
       expect(methodSpy).toHaveBeenCalledWith(null);
       expect(component.isValid.emit).toHaveBeenCalledWith(false);
@@ -1031,35 +1036,30 @@ describe('Component: TimepickerComponent', () => {
       spyOn(component, '_updateTime').and.stub();
       component.minutes = '10';
 
-      component.updateMinutes('99');
+      component.onTimeChanged('0', '30', '0');
 
-      expect(Boolean(component.ngControl.hasError('minutes'))).toEqual(false);
+      expect(Boolean(component.errors)).toEqual(false);
       expect(component._updateTime).toHaveBeenCalled();
     });
 
-    it('should clear model if setted seconds as invalid', () => {
-      component.showSeconds = true;
-
+    it('should clear model if second input is invalid', () => {
       const methodSpy = spyOn(component, 'onChange').and.callThrough();
       spyOn(component.isValid, 'emit').and.stub();
+      component.showSeconds = true;
+      component.seconds = '10';
 
-      component.ngControl.control.setErrors({ seconds: true });
-
-      fixture.detectChanges();
+      component.onTimeChanged('0', '0', '99');
 
       expect(methodSpy).toHaveBeenCalledWith(null);
       expect(component.isValid.emit).toHaveBeenCalledWith(false);
     });
 
-    it('should clear model if second limits are invalid', () => {
-      component.showSeconds = true;
-
+    it('should clear model if second out of range', () => {
       const methodSpy = spyOn(component, 'onChange').and.callThrough();
       spyOn(component.isValid, 'emit').and.stub();
+      component.max = testTime(0, 0, 30);
 
-      component.ngControl.control.setErrors({ seconds: { inputLimit: true } });
-
-      fixture.detectChanges();
+      component.onTimeChanged('0', '0', '50');
 
       expect(methodSpy).toHaveBeenCalledWith(null);
       expect(component.isValid.emit).toHaveBeenCalledWith(false);
@@ -1069,79 +1069,10 @@ describe('Component: TimepickerComponent', () => {
       spyOn(component, '_updateTime').and.stub();
       component.seconds = '10';
 
-      component.updateSeconds('30');
+      component.onTimeChanged('0', '0', '30');
 
-      expect(Boolean(component.ngControl.hasError('seconds'))).toEqual(false);
+      expect(Boolean(component.errors)).toEqual(false);
       expect(component._updateTime).toHaveBeenCalled();
-    });
-
-    it('should be called with right values', () => {
-      const methodSpy = spyOn(component, 'onChange').and.callThrough();
-      component.onChanged('23', '40', '35');
-
-      fixture.detectChanges();
-
-      expect(methodSpy).toHaveBeenCalledWith({
-        hours: '23', minutes: '40', seconds: '35',
-        range: { min: null, max: null },
-        isPM: false
-      });
-    });
-
-    it('should involve right actions', () => {
-      spyOn(component, '_updateTime').and.stub();
-      spyOn(component.isValid, 'emit').and.stub();
-
-      component.ngControl.valueChanges.subscribe((value: any) => {
-        expect(value.hours).toBe('22');
-        expect(value.minutes).toBe('55');
-        expect(value.seconds).toBe('40');
-      });
-
-      component.ngControl.control.setValue({ hours: '22', minutes: '55', seconds: '40' });
-
-      expect(component.hours).toBe('22');
-      expect(component.minutes).toBe('55');
-      expect(component.seconds).toBe('40');
-
-      expect(component.isValid.emit).toHaveBeenCalledWith(true);
-      expect(component._updateTime).toHaveBeenCalled();
-    });
-
-    it('should involve right actions (valueChanges)', () => {
-      component.ngControl.control.setErrors(null);
-
-      spyOn(component, '_updateTime').and.stub();
-      spyOn(component.isValid, 'emit').and.stub();
-
-      component.ngControl.valueChanges.subscribe((value: any) => {
-        expect(value.hours).toBe('22');
-        expect(value.minutes).toBe('55');
-        expect(value.seconds).toBe('40');
-      });
-
-      component.ngControl.control.setValue({ hours: '22', minutes: '55', seconds: '40' });
-
-      expect(component.hours).toBe('22');
-      expect(component.minutes).toBe('55');
-      expect(component.seconds).toBe('40');
-
-      expect(component.isValid.emit).toHaveBeenCalledWith(true);
-      expect(component._updateTime).toHaveBeenCalled();
-    });
-
-    it('should involve right actions (statusChanges)', () => {
-      const methodSpy = spyOn(component, 'onChange').and.callThrough();
-      spyOn(component.isValid, 'emit').and.stub();
-
-      component.ngControl.statusChanges.subscribe((errors: any) => {
-        expect(errors).toBe('INVALID');
-      });
-
-      component.ngControl.control.setErrors({ someError: true });
-
-      expect(component.isValid.emit).toHaveBeenCalledWith(false);
-      expect(methodSpy).toHaveBeenCalledWith(null);
     });
 
     it('should valid value in input fields', fakeAsync(() => {

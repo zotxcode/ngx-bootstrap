@@ -31,8 +31,8 @@
   </tr>
   <tr>
     <!-- hours -->
-    <td class="form-group" [class.has-error]="ngControl.hasError('hours')">
-      <input type="text" [class.is-invalid]="ngControl.hasError('hours')"
+    <td class="form-group" [class.has-error]="errors?.hours">
+      <input type="text" [class.is-invalid]="errors?.hours"
              class="form-control text-center bs-timepicker-field"
              placeholder="HH"
              maxlength="2"
@@ -43,12 +43,12 @@
              (wheel)="prevDef($event);changeTimeOption('hours', hourStep * wheelSign($event), 'wheel')"
              (keydown.ArrowUp)="changeTimeOption('hours', hourStep, 'key')"
              (keydown.ArrowDown)="changeTimeOption('hours', -hourStep, 'key')"
-             (change)="onChanged($event.target.value, minutes, seconds)"></td>
+             (change)="onTimeChanged($event.target.value, minutes, seconds)"></td>
     <!-- divider -->
     <td *ngIf="showMinutes">&nbsp;:&nbsp;</td>
     <!-- minutes -->
-    <td class="form-group" *ngIf="showMinutes" [class.has-error]="ngControl.hasError('minutes')">
-      <input type="text" [class.is-invalid]="ngControl.hasError('minutes')"
+    <td class="form-group" *ngIf="showMinutes" [class.has-error]="errors?.minutes">
+      <input type="text" [class.is-invalid]="errors?.minutes"
              class="form-control text-center bs-timepicker-field"
              placeholder="MM"
              maxlength="2"
@@ -59,13 +59,13 @@
              (wheel)="prevDef($event);changeTimeOption('minutes', minuteStep * wheelSign($event), 'wheel')"
              (keydown.ArrowUp)="changeTimeOption('minutes', minuteStep, 'key')"
              (keydown.ArrowDown)="changeTimeOption('minutes', -minuteStep, 'key')"
-             (change)="onChanged(hours, $event.target.value, seconds)">
+             (change)="onTimeChanged(hours, $event.target.value, seconds)">
     </td>
     <!-- divider -->
     <td *ngIf="showSeconds">&nbsp;:&nbsp;</td>
     <!-- seconds -->
-    <td class="form-group" *ngIf="showSeconds" [class.has-error]="ngControl.hasError('seconds')">
-      <input type="text" [class.is-invalid]="ngControl.hasError('seconds')"
+    <td class="form-group" *ngIf="showSeconds" [class.has-error]="errors?.seconds">
+      <input type="text" [class.is-invalid]="errors?.seconds"
              class="form-control text-center bs-timepicker-field"
              placeholder="SS"
              maxlength="2"
@@ -76,7 +76,7 @@
              (wheel)="prevDef($event);changeTimeOption('seconds', secondsStep * wheelSign($event), 'wheel')"
              (keydown.ArrowUp)="changeTimeOption('seconds', secondsStep, 'key')"
              (keydown.ArrowDown)="changeTimeOption('seconds', -secondsStep, 'key')"
-             (change)="onChanged(hours, minutes, $event.target.value)">
+             (change)="onTimeChanged(hours, minutes, $event.target.value)">
     </td>
     <!-- space between -->
     <td *ngIf="showMeridian">&nbsp;&nbsp;&nbsp;</td>

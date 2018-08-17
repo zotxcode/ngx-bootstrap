@@ -1,22 +1,23 @@
 import { Time, TimepickerComponentState } from '../../timepicker/timepicker.models';
 import {
+  changeTime,
+  createDate,
+  isHourInputValid,
+  isInputLimitValid,
+  isInputValid,
+  isInRange,
+  isMinuteInputValid,
+  isNumber,
+  isSecondInputValid,
   isValidDate,
   isValidLimit,
-  toNumber,
-  isNumber,
+  padNumber,
   parseHours,
   parseMinutes,
   parseSeconds,
   parseTime,
-  changeTime,
   setTime,
-  createDate,
-  padNumber,
-  isHourInputValid,
-  isMinuteInputValid,
-  isSecondInputValid,
-  isInputLimitValid,
-  isInputValid, isInRange
+  toNumber
 } from '../../timepicker/timepicker.utils';
 
 const controls: TimepickerComponentState = {
@@ -187,19 +188,31 @@ describe('Runtime coverage. Utils: Timepicker', () => {
     expect(result).toEqual(false);
   });
 
-  it('isInRange method should validate the date according to the max limit and return false', () => {
+  it('isInRange method should validate the date according to the limit and return false', () => {
     const result = isInRange(testTime(2, 0, 0), controls.max, controls.min);
 
     expect(result).toEqual(false);
   });
 
-  it('isInRange method should validate the date according to the max limit and return false', () => {
+  it('isInRange method should validate the date according to the limit and return true', () => {
     const result = isInRange(testTime(4, 0, 0), controls.max, controls.min);
 
     expect(result).toEqual(true);
   });
 
-  it('isInRange method should validate the date according to the max and min limit and return true', () => {
+  it('isInRange method should validate the date according to the max limit and return false', () => {
+    const result = isInRange(testTime(18, 0, 0), controls.max, null);
+
+    expect(result).toEqual(false);
+  });
+
+  it('isInRange method should validate the date according to the min limit and return false', () => {
+    const result = isInRange(testTime(2, 0, 0), null, controls.min);
+
+    expect(result).toEqual(false);
+  });
+
+  it('isInRange method should validate the date according to the limit and return true', () => {
     const result = isInRange(testTime(4, 0, 0), null, null);
 
     expect(result).toEqual(true);
