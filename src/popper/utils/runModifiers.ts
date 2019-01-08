@@ -23,6 +23,7 @@ export function runModifiers(modifiers, data, ends?) {
       // we do this before each modifier to make sure the previous one doesn't
       // mess with these values
       data.offsets.popper = getClientRect(data.offsets.popper);
+
       data.offsets.reference = getClientRect(data.offsets.reference);
 
       data = fn(data, modifier);

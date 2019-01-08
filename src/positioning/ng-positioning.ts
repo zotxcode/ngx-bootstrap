@@ -7,11 +7,12 @@ import {
   computeAutoPlacement,
   getBoundaries,
   getBoundingClientRect,
+  getClientRect,
   getOffsetParent,
-  getPopperOffsets,
-  getReferenceOffsets,
   getOppositePlacement,
-  getOppositeVariation
+  getOppositeVariation,
+  getPopperOffsets,
+  getReferenceOffsets
 } from 'ngx-bootstrap/popper';
 
 // previous version:`
@@ -69,92 +70,92 @@ export class Positioning {
     return elPosition;
   }
 
-  preventOverflow(boundariesEl, tooltip, reference, offsetsPopper) {
-    let boundariesElement =
-      boundariesEl || getOffsetParent(tooltip);
-
-    // If offsetParent is the reference element, we really want to
-    // go one step up and use the next offsetParent as reference to
-    // avoid to make this modifier completely useless and look like broken
-    if (reference === boundariesElement) {
-      boundariesElement = getOffsetParent(boundariesElement);
-    }
-
-    // NOTE: DOM access here
-    // resets the popper's position so that the document size can be calculated excluding
-    // the size of the popper element itself
-    const transformProp = 'transform';
-    const popperStyles = tooltip.style; // assignment to help minification
-    const { top, left, [transformProp]: transform } = popperStyles;
-    popperStyles.top = '';
-    popperStyles.left = '';
-    popperStyles[transformProp] = '';
-
-    const boundaries = getBoundaries(
-      tooltip,
-      reference,
-      0, // options.padding
-      boundariesElement,
-      false // data.positionFixed
-    );
-
-    // NOTE: DOM access here
-    // restores the original style properties after the offsets have been computed
-    popperStyles.top = top;
-    popperStyles.left = left;
-    popperStyles[transformProp] = transform;
-
-    // options.boundaries = boundaries;
-
-    const order = ['left', 'right', 'top', 'bottom'];
-    let popper = offsetsPopper;
-
-    const check = {
-      primary(placement) {
-        let value = popper[placement];
-        if (
-          popper[placement] < boundaries[placement] &&
-          !false // options.escapeWithReference
-        ) {
-          value = Math.max(popper[placement], boundaries[placement]);
-        }
-
-        return { [placement]: value };
-      },
-      secondary(placement) {
-        const mainSide = placement === 'right' ? 'left' : 'top';
-        let value = popper[mainSide];
-        if (
-          popper[placement] > boundaries[placement] &&
-          !false // options.escapeWithReference
-        ) {
-          value = Math.min(
-            popper[mainSide],
-            boundaries[placement] -
-            (placement === 'right' ? popper.width : popper.height)
-          );
-        }
-
-        return { [mainSide]: value };
-      }
-    };
-
-    let side: string;
-
-    order.forEach(placement => {
-      side = ['left', 'top']
-        .indexOf(placement) !== -1
-        ? 'primary'
-        : 'secondary';
-
-      popper = { ...popper, ...check[side](placement) };
-
-    });
-
-    offsetsPopper = popper;
-
-    return offsetsPopper;
-  }
+  // preventOverflow(boundariesEl, tooltip, reference, offsetsPopper) {
+  //   let boundariesElement =
+  //     boundariesEl || getOffsetParent(tooltip);
+  //
+  //   // If offsetParent is the reference element, we really want to
+  //   // go one step up and use the next offsetParent as reference to
+  //   // avoid to make this modifier completely useless and look like broken
+  //   if (reference === boundariesElement) {
+  //     boundariesElement = getOffsetParent(boundariesElement);
+  //   }
+  //
+  //   // NOTE: DOM access here
+  //   // resets the popper's position so that the document size can be calculated excluding
+  //   // the size of the popper element itself
+  //   const transformProp = 'transform';
+  //   const popperStyles = tooltip.style; // assignment to help minification
+  //   const { top, left, [transformProp]: transform } = popperStyles;
+  //   popperStyles.top = '';
+  //   popperStyles.left = '';
+  //   popperStyles[transformProp] = '';
+  //
+  //   const boundaries = getBoundaries(
+  //     tooltip,
+  //     reference,
+  //     0, // options.padding
+  //     boundariesElement,
+  //     false // data.positionFixed
+  //   );
+  //
+  //   // NOTE: DOM access here
+  //   // restores the original style properties after the offsets have been computed
+  //   popperStyles.top = top;
+  //   popperStyles.left = left;
+  //   popperStyles[transformProp] = transform;
+  //
+  //   // options.boundaries = boundaries;
+  //
+  //   const order = ['left', 'right', 'top', 'bottom'];
+  //   let popper = offsetsPopper;
+  //
+  //   const check = {
+  //     primary(placement) {
+  //       let value = popper[placement];
+  //       if (
+  //         popper[placement] < boundaries[placement] &&
+  //         !false // options.escapeWithReference
+  //       ) {
+  //         value = Math.max(popper[placement], boundaries[placement]);
+  //       }
+  //
+  //       return { [placement]: value };
+  //     },
+  //     secondary(placement) {
+  //       const mainSide = placement === 'right' ? 'left' : 'top';
+  //       let value = popper[mainSide];
+  //       if (
+  //         popper[placement] > boundaries[placement] &&
+  //         !false // options.escapeWithReference
+  //       ) {
+  //         value = Math.min(
+  //           popper[mainSide],
+  //           boundaries[placement] -
+  //           (placement === 'right' ? popper.width : popper.height)
+  //         );
+  //       }
+  //
+  //       return { [mainSide]: value };
+  //     }
+  //   };
+  //
+  //   let side: string;
+  //
+  //   order.forEach(placement => {
+  //     side = ['left', 'top']
+  //       .indexOf(placement) !== -1
+  //       ? 'primary'
+  //       : 'secondary';
+  //
+  //     popper = { ...popper, ...check[side](placement) };
+  //
+  //   });
+  //
+  //   offsetsPopper = popper;
+  //
+  //   return offsetsPopper;
+  // }
 
   flip(boundariesEl, tooltip, reference, offsetsPopper, referenceOffsets, inputPlacement) {
     let boundariesElement =
@@ -176,6 +177,9 @@ export class Positioning {
 
     flipOrder = [placement, placementOpposite];
 
+    let popperOffsets = offsetsPopper;
+    let refOffsets = referenceOffsets;
+
     /* tslint:disable-next-line: cyclomatic-complexity */
     flipOrder.forEach((step, index) => {
       if (placement !== step || flipOrder.length === index + 1) {
@@ -184,9 +188,6 @@ export class Positioning {
 
       placement = inputPlacement.split('-')[0];
       placementOpposite = getOppositePlacement(placement);
-
-      const popperOffsets = referenceOffsets;
-      const refOffsets = offsetsPopper;
 
       // using floor because the reference offsets may contain decimals we are not going to consider here
       const floor = Math.floor;
@@ -203,8 +204,7 @@ export class Positioning {
       const overflowsLeft = floor(popperOffsets.left) < floor(boundaries.left);
       const overflowsRight = floor(popperOffsets.right) > floor(boundaries.right);
       const overflowsTop = floor(popperOffsets.top) < floor(boundaries.top);
-      const overflowsBottom =
-        floor(popperOffsets.bottom) > floor(boundaries.bottom);
+      const overflowsBottom = floor(popperOffsets.bottom) > floor(boundaries.bottom);
 
       const overflowsBoundaries =
         (placement === 'left' && overflowsLeft) ||
@@ -233,10 +233,19 @@ export class Positioning {
         }
 
         placement = placement + (variation ? `-${variation}` : '');
+
+        popperOffsets = {
+          ...popperOffsets,
+          ...getPopperOffsets(
+            tooltip,
+            refOffsets,
+            placement
+          )
+        };
       }
     });
 
-    return placement;
+    return popperOffsets;
   }
 
 
@@ -257,13 +266,13 @@ export class Positioning {
       0
     );
 
-    const popperOffsets: any = getPopperOffsets(targetElement, referenceOffsets, autoPlacement);
+    let popperOffsets: any = getPopperOffsets(targetElement, referenceOffsets, autoPlacement);
 
-    const overPlacement = this.preventOverflow('scrollParent', targetElement, hostElement, popperOffsets);
+    popperOffsets = getClientRect(popperOffsets);
 
-    console.log(overPlacement);
+    popperOffsets = this.flip('viewport', targetElement, hostElement, popperOffsets, referenceOffsets, placement);
 
-    this.flip('viewport', targetElement, hostElement, popperOffsets, referenceOffsets, placement);
+    // const overPlacement = this.preventOverflow('scrollParent', targetElement, hostElement, popperOffsets);
 
     // const hostElPosition = appendToBody
     //   ? this.offset(hostElement, false)
@@ -284,8 +293,10 @@ export class Positioning {
 
     targetElPosition.top = Math.round(popperOffsets.top);
     targetElPosition.left = Math.round(popperOffsets.left);
+    targetElPosition.bottom = Math.round(popperOffsets.bottom);
+    targetElPosition.right = Math.round(popperOffsets.right);
 
-    const offsetParent = getOffsetParent(hostElement);
+    // const offsetParent = getOffsetParent(hostElement);
 
     const offsets: any = {
       width: popperOffsets.width,
