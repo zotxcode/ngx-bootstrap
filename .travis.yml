@@ -78,7 +78,7 @@ jobs:
     - script:
         - ng serve --prod &
         - $(npm bin)/wait-on http-get://$URL
-        - npm run cy:run:smoke
+        - npm run cy:run:smoke -- --record --key $CY_KE --parallel
         # after all tests finish running we need
         # to kill all background jobs (like "npm start &")
         - kill $(jobs -p) || true
