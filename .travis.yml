@@ -157,17 +157,17 @@ jobs:
     - stage: "post deploy testing"
       name: "Run cypress to check SSR"
 #      env: URL=https://ngx-universal.herokuapp.com/#
-    - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/integration,baseUrl=https://ngx-universal.herokuapp.com/#/ --record --key $CY_KEY
+    - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/integration,baseUrl=https://ngx-universal.herokuapp.com/#/ --record --key $CY_KEY --parallel
       name: "Cypress integration suit run on SSR "
     - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/full,baseUrl=https://ngx-universal.herokuapp.com/#/ --record --key $CY_KEY
       name: "Cypress full suit run on SSR "
 #     test cypress full for gh-pages
-    - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/integration,baseUrl=http://ngx-bootstrap-latest.surge.sh/#/ --record --key $CY_KEY
+    - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/integration,baseUrl=http://ngx-bootstrap-latest.surge.sh/#/ --record --key $CY_KEY --parallel
       name: "Cypres integration run with @latest angular"
     - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/full,baseUrl=http://ngx-bootstrap-latest.surge.sh/#/ --record --key $CY_KEY
       name: "Cypres full run with @latest angular"
 #      env: URL=https://valor-software.com/ngx-bootstrap/#/
-    - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/integration,baseUrl=https://valor-software.com/ngx-bootstrap/#/ --record --key $CY_KEY
+    - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/integration,baseUrl=https://valor-software.com/ngx-bootstrap/#/ --record --key $CY_KEY --parallel
       name: "Cypress integration on gh-pages after deploy"
       if: tag =~ ^v\d+
     - script: ./node_modules/.bin/cypress run --config integrationFolder=cypress/full,baseUrl=https://valor-software.com/ngx-bootstrap/#/ --record --key $CY_KEY
