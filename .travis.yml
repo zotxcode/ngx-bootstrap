@@ -75,16 +75,16 @@ jobs:
 #     env: NGV=next
 
 #     test cypress smoke
-    defaults: &testDefaults
-      script:
-        - ng serve --prod &
-        - $(npm bin)/wait-on http-get://$URL
-        - npm run cy:run:smoke -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
-        # after all tests finish running we need
-        # to kill all background jobs (like "npm start &")
-        - kill $(jobs -p) || true
-      name: "Run cypress smoke testing"
-      env: URL=localhost:4200/#
+      defaults: &testDefaults
+        script:
+          - ng serve --prod &
+          - $(npm bin)/wait-on http-get://$URL
+          - npm run cy:run:smoke -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
+          # after all tests finish running we need
+          # to kill all background jobs (like "npm start &")
+          - kill $(jobs -p) || true
+        name: "Run cypress smoke testing"
+        env: URL=localhost:4200/#
 
       jobs:
         include:
