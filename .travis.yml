@@ -22,13 +22,13 @@ env:
 defaults: &defaults
   script:
     - ng serve --prod &
-    - $(npm bin)/wait-on http-get://$URL
+    - $(npm bin)/wait-on http-get://localhost:4200/#
     - npm run cy:run:smoke -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
      # after all tests finish running we need
      # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
   # name: "Run cypress smoke testing"
-  env: URL=localhost:4200/#
+ # env: URL=localhost:4200/#
 
 stages:
   - name: Testing
@@ -88,17 +88,20 @@ jobs:
 
     - script:
       name: "Cypress Tests first thread"
-      env: CI_THREAD_INDEX=1
+      env:
+        - CI_THREAD_INDEX=1x-electron
       <<: *defaults
 
     - script:
-      name: "Cypress Tests 2 thread"
-      env: CI_THREAD_INDEX=1
+      name: "Cypress Tests 2d thread"
+      env:
+        - CI_THREAD_INDEX=1x-electron
       <<: *defaults
 
     - script:
-      name: "Cypress Tests 3 thread"
-      env: CI_THREAD_INDEX=1
+      name: "Cypress Tests 3d thread"
+      env:
+        - CI_THREAD_INDEX=1x-electron
       <<: *defaults
 
 
