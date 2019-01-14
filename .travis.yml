@@ -88,17 +88,17 @@ jobs:
 
     - script:
       name: "Cypress Tests first thread"
-      env: CI_THREAD_INDEX=1-thread
+      env: CI_THREAD_INDEX=1
       <<: *defaults
 
     - script:
       name: "Cypress Tests 2 thread"
-      env: CI_THREAD_INDEX=1-thread
+      env: CI_THREAD_INDEX=1
       <<: *defaults
 
     - script:
       name: "Cypress Tests 3 thread"
-      env: CI_THREAD_INDEX=1-thread
+      env: CI_THREAD_INDEX=1
       <<: *defaults
 
 
