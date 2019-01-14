@@ -86,15 +86,23 @@ jobs:
       env: NGV=latest
 #     env: NGV=next
 
-    - <<: *defaults
+    - script:
       name: "Cypress Tests first thread"
       env: CI_THREAD_INDEX=1-thread
-    - <<: *defaults
-      name: "Cypress Tests second thread"
+      <<: *defaults
+
+    - script:
+      name: "Cypress Tests 2 thread"
       env: CI_THREAD_INDEX=1-thread
-    - <<: *defaults
-      name: "Cypress Tests third thread"
+      <<: *defaults
+
+    - script:
+      name: "Cypress Tests 3 thread"
       env: CI_THREAD_INDEX=1-thread
+      <<: *defaults
+
+
+
 
 #    check prod build
     - script: npm run demo.ng-build
