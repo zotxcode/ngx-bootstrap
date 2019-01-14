@@ -75,11 +75,8 @@ jobs:
 #     env: NGV=next
 
 #     test cypress smoke
-    - matrix:
-        - CI_THREAD_INDEX=thread-0
-        - CI_THREAD_INDEX=thread-1
-        - CI_THREAD_INDEX=thread-2
-    - script:
+    defaults: &testDefaults
+      script:
         - ng serve --prod &
         - $(npm bin)/wait-on http-get://$URL
         - npm run cy:run:smoke -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
@@ -88,6 +85,24 @@ jobs:
         - kill $(jobs -p) || true
       name: "Run cypress smoke testing"
       env: URL=localhost:4200/#
+
+      jobs:
+        include:
+          - stage: Testing
+            env:
+              - CI_THREAD_INDEX=1-thread
+            <<: *testDefaults
+
+          - stage: Testing
+            env:
+              - CI_THREAD_INDEX=1-thread
+            <<: *testDefaults
+
+          - stage: Testing
+            env:
+              - CI_THREAD_INDEX=1-thread
+            <<: *testDefaults
+
 #    check prod build
     - script: npm run demo.ng-build
       name: "Check prod build with current Angular version"
