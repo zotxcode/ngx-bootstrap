@@ -185,9 +185,9 @@ jobs:
 
 #     test cypress full for herokuapp
     - stage: "post deploy testing"
-      name: "Run cypress to check SSR"
+#      name: "Run cypress to check SSR"
 #      env: URL=https://ngx-universal.herokuapp.com/#
-    - script:
+      script:
       name: "Cypress integration suit run on SSR 1thread"
       env:
          - CI_THREAD_INDEX=1-electron
@@ -224,7 +224,7 @@ jobs:
         - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
         <<: *SmokeTestPostDeploy
 
-     - script:
+    - script:
       name: "Cypress integration run with @latest angular 2thread"
       env:
         - CI_THREAD_INDEX=3-electron
