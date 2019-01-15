@@ -29,10 +29,10 @@ defaults: &defaults
     - kill $(jobs -p) || true
 
 SmokeTestPostDeploy: &SmokeTestPostDeploy
-  script: npm run cy:run:smoke -- --CYPRESS_baseUrl $BASE_URL --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
+  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:smoke -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
 
 FullTestPostDeploy: &FullTestPostDeploy
-  script: npm run cy:run:full -- --CYPRESS_baseUrl $BASE_URL --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
+  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:full -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
 
 stages:
   - name: Testing
