@@ -30,11 +30,11 @@ defaults: &defaults
 
 defaultSmokeTestPostDeploy: &SmokeTestPostDeploy
   script:
-    - npm run cy:run:smoke -- --baseUrl=$BASE_URL --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
+    - npm run cy:run:smoke -- --baseUrl $BASE_URL --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
 
 defaultFullTestPostDeploy: &FullTestPostDeploy
   script:
-    - npm run cy:run:full -- --baseUrl=$BASE_URL --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
+    - npm run cy:run:full -- --baseUrl $BASE_URL --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
 
 stages:
   - name: Testing
@@ -44,6 +44,7 @@ stages:
   - name: publish
     if: tag =~ ^v\d+
   - name: "post deploy testing"
+    if: ( branch = development AND type = push ) OR type = pull_request OR tag =~ ^v\d+
 #    if: branch = development AND type = push OR tag =~ ^v\d+
 # temporary commented for checking parallelization post-deploy-tests
 
