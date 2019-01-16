@@ -104,7 +104,9 @@ export class BsDatepickerEffects {
       .pipe(
         map(showWeekNumbers => ({showWeekNumbers}))
       );
-
+    container.options = this._store
+      .select(function (state) { return state.unavailableDates; })
+      .pipe(map(function (unavailableDates) { return ({ unavailableDates: unavailableDates }); }));
     return this;
   }
 

@@ -41,12 +41,20 @@ import {
           <td class="week" *ngIf="options.showWeekNumbers">
             <span>{{ calendar.weekNumbers[i] }}</span>
           </td>
-          <td *ngFor="let day of week.days" role="gridcell">
+          <td [class]="options.unavailableDates.includes(day.date.getFullYear() + '-' + (day.date.getMonth() + 1) + '-' + day.date.getDate()) ? 'disabled date-disabled' : ''" *ngFor="let day of week.days" >
           <span bsDatepickerDayDecorator
                 [day]="day"
                 (click)="selectDay(day)"
                 (mouseenter)="hoverDay(day, true)"
                 (mouseleave)="hoverDay(day, false)">{{ day.label }}</span>
+
+          <span bsDatepickerDayDecorator
+                *ngIf="!options.unavailableDates.includes(day.date.getFullYear() + '-' + (day.date.getMonth() + 1) + '-' + day.date.getDate())"
+                [day]="day"
+                (click)="selectDay(day)"
+                (mouseenter)="hoverDay(day, true)"
+                (mouseleave)="hoverDay(day, false)">{{ day.label }}</span>
+          <span *ngIf="options.unavailableDates.includes(day.date.getFullYear() + '-' + (day.date.getMonth() + 1) + '-' + day.date.getDate())">{{ day.label }}</span>
           </td>
         </tr>
         </tbody>
