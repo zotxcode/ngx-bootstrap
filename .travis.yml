@@ -29,7 +29,7 @@ testSmokeCy: &testSmokeCy
     - kill $(jobs -p) || true
 
 testPostDeploy: &testPostDeploy
-  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id PostDeploy-$CI_THREAD_INDEX-$TRAVIS_BUILD_ID
+  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id PostDeploy-$TRAVIS_BUILD_ID
 
 stages:
   - name: Testing
@@ -90,25 +90,13 @@ jobs:
 #     env: NGV=next
 
     - script:
-      name: "Cypress Smoke Tests first thread"
-      env:
-        - CI_THREAD_INDEX=3x-electron
-      <<: *testSmokeCy
-
-    - script:
-      name: "Cypress Smoke Tests 2d thread"
-      env:
-        - CI_THREAD_INDEX=3x-electron
-      <<: *testSmokeCy
-
-    - script:
-      name: "Cypress Smoke Tests 3d thread"
-      env:
-        - CI_THREAD_INDEX=3x-electron
-      <<: *testSmokeCy
-
-
-
+      matrix:
+        include:
+          - name: "Cypress Smoke Tests 1t thread"
+          - name: "Cypress Smoke Tests 2d thread"
+          - name: "Cypress Smoke Tests 3d thread"
+        env: CI_THREAD_INDEX=3x-electron
+        <<: *testSmokeCy
 
 #    check prod build
     - script: npm run demo.ng-build
