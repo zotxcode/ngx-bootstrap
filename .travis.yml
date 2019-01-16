@@ -19,7 +19,7 @@ env:
     - CY_KEY=4aa7a1c0-3a4f-444e-b324-6fc305a543a8
 
 #     test cypress smoke
-defaults: &defaults
+testSmokeCy: &testSmokeCy
   script:
     - ng serve --prod &
     - $(npm bin)/wait-on http-get://localhost:4200/#
@@ -28,11 +28,8 @@ defaults: &defaults
      # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
 
-SmokeTestPostDeploy: &SmokeTestPostDeploy
-  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:smoke -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
-
-FullTestPostDeploy: &FullTestPostDeploy
-  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:full -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
+testPostDeploy: &testPostDeploy
+  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX
 
 stages:
   - name: Testing
@@ -93,22 +90,22 @@ jobs:
 #     env: NGV=next
 
     - script:
-      name: "Cypress Tests first thread"
+      name: "Cypress Smoke Tests first thread"
       env:
-        - CI_THREAD_INDEX=1x-electron
-      <<: *defaults
+        - CI_THREAD_INDEX=3x-electron
+      <<: *testSmokeCy
 
     - script:
-      name: "Cypress Tests 2d thread"
+      name: "Cypress Smoke Tests 2d thread"
       env:
-        - CI_THREAD_INDEX=1x-electron
-      <<: *defaults
+        - CI_THREAD_INDEX=3x-electron
+      <<: *testSmokeCy
 
     - script:
-      name: "Cypress Tests 3d thread"
+      name: "Cypress Smoke Tests 3d thread"
       env:
-        - CI_THREAD_INDEX=1x-electron
-      <<: *defaults
+        - CI_THREAD_INDEX=3x-electron
+      <<: *testSmokeCy
 
 
 
@@ -187,83 +184,44 @@ jobs:
 #      name: "Run cypress to check SSR"
 #      env: URL=https://ngx-universal.herokuapp.com/#
       script:
-      name: "Cypress integration suit run on SSR 1thread"
-      env:
-        - CI_THREAD_INDEX=1x-electron
-        - BASE_URL=https://ngx-universal.herokuapp.com/#/
-      <<: *SmokeTestPostDeploy
-    - script:
-      name: "Cypress integration suit run on SSR 2thread"
-      env:
-        - CI_THREAD_INDEX=1x-electron
-        - BASE_URL=https://ngx-universal.herokuapp.com/#/
-      <<: *SmokeTestPostDeploy
-    - script:
-      name: "Cypress full suit run on SSR 1thread"
+      name: "Cypress suit run on SSR 1thread"
       env:
         - CI_THREAD_INDEX=2x-electron
         - BASE_URL=https://ngx-universal.herokuapp.com/#/
-      <<: *FullTestPostDeploy
+      <<: *testPostDeploy
     - script:
-      name: "Cypress full suit run on SSR 2thread"
+      name: "Cypress suit run on SSR 2thread"
       env:
         - CI_THREAD_INDEX=2x-electron
         - BASE_URL=https://ngx-universal.herokuapp.com/#/
-      <<: *FullTestPostDeploy
+      <<: *testPostDeploy
 #     test cypress full for gh-pages
     - script:
-      name: "Cypress integration run with @latest angular 1thread"
+      name: "Cypress with @latest angular 1thread"
       env:
-        - CI_THREAD_INDEX=3x-electron
+        - CI_THREAD_INDEX=2.1x-electron
         - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
-      <<: *SmokeTestPostDeploy
+      <<: *testPostDeploy
     - script:
-      name: "Cypress integration run with @latest angular 2thread"
+      name: "Cypress with @latest angular 2thread"
       env:
-        - CI_THREAD_INDEX=3x-electron
+        - CI_THREAD_INDEX=2.1x-electron
         - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
-      <<: *SmokeTestPostDeploy
+      <<: *testPostDeploy
     - script:
-      name: "Cypres full run with @latest angular 1thread"
+      name: "Cypress on gh-pages after deploy 1thread"
       env:
-        - CI_THREAD_INDEX=4x-electron
-        - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
-      <<: *FullTestPostDeploy
-    - script:
-      name: "Cypres full run with @latest angular 2thread"
-      env:
-        - CI_THREAD_INDEX=4x-electron
-        - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
-      <<: *FullTestPostDeploy
-#      env: URL=https://valor-software.com/ngx-bootstrap/#/
-    - script:
-      name: "Cypress integration on gh-pages after deploy 1thread"
-      env:
-        - CI_THREAD_INDEX=5x-electron
+        - CI_THREAD_INDEX=2.2x-electron
         - BASE_URL=https://valor-software.com/ngx-bootstrap/#/
-      <<: *SmokeTestPostDeploy
+      <<: *testPostDeploy
 #      if: tag =~ ^v\d+
 #temporary
     - script:
-      name: "Cypress integration on gh-pages after deploy 2thread"
+      name: "Cypress on gh-pages after deploy 2thread"
       env:
-        - CI_THREAD_INDEX=5x-electron
+        - CI_THREAD_INDEX=2.2x-electron
         - BASE_URL=https://valor-software.com/ngx-bootstrap/#/
-      <<: *SmokeTestPostDeploy
-#      if: tag =~ ^v\d+
-#temporary
-    - script:
-      name: "Cypress full on gh-pages after deploy 1thread"
-      env:
-        - CI_THREAD_INDEX=6x-electron
-        - BASE_URL=https://valor-software.com/ngx-bootstrap/#/
-      <<: *FullTestPostDeploy
-    - script:
-      name: "Cypress full on gh-pages after deploy 2thread"
-      env:
-        - CI_THREAD_INDEX=6x-electron
-        - BASE_URL=https://valor-software.com/ngx-bootstrap/#/
-      <<: *FullTestPostDeploy
+      <<: *testPostDeploy
 #      if: tag =~ ^v\d+
 #temporary
 
