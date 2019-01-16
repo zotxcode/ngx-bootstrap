@@ -29,10 +29,7 @@ testSmokeCy: &testSmokeCy
     - kill $(jobs -p) || true
 
 testPostDeploy: &testPostDeploy
-  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id PostDeploy-$TRAVIS_BUILD_ID
-
-testProdPostDeploy: &testProdPostDeploy
-  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id Prod-PostDeploy-$TRAVIS_BUILD_ID
+  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id PostDeploy-$CI_THREAD_INDEX-$TRAVIS_BUILD_ID
 
 stages:
   - name: Testing
@@ -92,10 +89,15 @@ jobs:
       env: NGV=latest
 #     env: NGV=next
     - script:
-      matrix:
-        - name: "Cypress Smoke Tests 1t thread"
-        - name: "Cypress Smoke Tests 2d thread"
-        - name: "Cypress Smoke Tests 3d thread"
+      name: "Cypress Smoke Tests 1t thread"
+      env: CI_THREAD_INDEX=3x-electron
+      <<: *testSmokeCy
+    - script:
+      name: "Cypress Smoke Tests 2d thread"
+      env: CI_THREAD_INDEX=3x-electron
+      <<: *testSmokeCy
+    - script:
+      name: "Cypress Smoke Tests 3d thread"
       env: CI_THREAD_INDEX=3x-electron
       <<: *testSmokeCy
 
@@ -194,35 +196,41 @@ jobs:
     - script:
       name: "Cypress with @latest angular 1thread"
       env:
-        - CI_THREAD_INDEX=2x-electron
+        - CI_THREAD_INDEX=3.1x-electron
         - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
       <<: *testPostDeploy
     - script:
       name: "Cypress with @latest angular 2thread"
       env:
-        - CI_THREAD_INDEX=2x-electron
+        - CI_THREAD_INDEX=3.1x-electron
+        - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
+      <<: *testPostDeploy
+     - script:
+      name: "Cypress with @latest angular 3thread"
+      env:
+        - CI_THREAD_INDEX=3.1x-electron
         - BASE_URL=http://ngx-bootstrap-latest.surge.sh/#/
       <<: *testPostDeploy
     - script:
       name: "Cypress on gh-pages after deploy 1thread"
       env:
-        - CI_THREAD_INDEX=3x-electron
+        - CI_THREAD_INDEX=3.2x-electron
         - BASE_URL=https://valor-software.com/ngx-bootstrap/#/
-      <<: *testProdPostDeploy
+      <<: *testPostDeploy
 #      if: tag =~ ^v\d+
 #temporary
     - script:
       name: "Cypress on gh-pages after deploy 2thread"
       env:
-        - CI_THREAD_INDEX=3x-electron
+        - CI_THREAD_INDEX=3.2x-electron
         - BASE_URL=https://valor-software.com/ngx-bootstrap/#/
-      <<: *testProdPostDeploy
+      <<: *testPostDeploy
     - script:
       name: "Cypress on gh-pages after deploy 3thread"
       env:
-        - CI_THREAD_INDEX=3x-electron
+        - CI_THREAD_INDEX=3.3x-electron
         - BASE_URL=https://valor-software.com/ngx-bootstrap/#/
-      <<: *testProdPostDeploy
+      <<: *testPostDeploy
 #      if: tag =~ ^v\d+
 #temporary
 
