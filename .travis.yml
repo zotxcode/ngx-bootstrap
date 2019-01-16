@@ -29,7 +29,7 @@ testSmokeCy: &testSmokeCy
     - kill $(jobs -p) || true
 
 testPostDeploy: &testPostDeploy
-  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id PostDeploy-$TRAVIS_BUILD_ID
+  script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id PostDeploy-$CI_THREAD_INDEX-$TRAVIS_BUILD_ID
 
 stages:
   - name: Testing
