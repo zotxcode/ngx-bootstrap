@@ -1,5 +1,5 @@
 {
-  "name": "ngx-bootstrap-base",
+  "name": "ngx-bootstrap",
   "version": "3.0.1",
   "description": "Native Angular Bootstrap Components",
   "private": true,
@@ -59,8 +59,8 @@
   "author": "Dmitriy Shekhovtsov <valorkin@gmail.com>",
   "license": "MIT",
   "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/valor-software/ngx-bootstrap.git"
+    "type": "https",
+    "url": "https://github.com/zotxcode/ngx-bootstrap.git"
   },
   "bugs": {
     "url": "https://github.com/valor-software/ngx-bootstrap/issues"
