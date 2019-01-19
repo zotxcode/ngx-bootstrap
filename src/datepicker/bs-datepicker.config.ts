@@ -33,7 +33,7 @@ export class BsDatepickerConfig
    * Allows to hide week numbers in datepicker
    */
   showWeekNumbers = true;
-  unavailableDates = [];
+  unavailableDates = [] as string[];
 
   dateInputFormat = 'L';
   // range picker
